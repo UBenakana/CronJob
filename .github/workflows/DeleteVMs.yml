@@ -1,0 +1,45 @@
+name: Delete Azure VMs
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Run every 5 minutes
+  push:
+    branches:
+      - main
+      - dev
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  delete-azure-vms:
+    name: Delete Azure VMs
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Delete Azure VMs
+        if: github.event_name == 'schedule' || (github.event_name == 'push' && github.ref == 'refs/heads/${{ github.event.ref_name }}')
+        run: |
+          echo "Deleting Azure VMs for branch: ${{ github.event.ref_name }}"
+          
+          # Add your PowerShell script or commands here to delete Azure VMs
+          # For example:
+          
+          # Configure Azure credentials
+          # az login --service-principal -u ${{ secrets.AZURE_SP_USERNAME }} -p ${{ secrets.AZURE_SP_PASSWORD }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+          
+          # Delete Azure VMs based on the current branch
+          if [ "${{ github.event.ref_name }}" == "main" ]; then
+            az vm delete --ids $(az vm list --query "[?starts_with(name,'prod-')].id" -o tsv) --yes
+          elif [ "${{ github.event.ref_name }}" == "preprod" ]; then
+            az vm delete --ids $(az vm list --query "[?starts_with(name,'preprod-')].id" -o tsv) --yes
+          elif [ "${{ github.event.ref_name }}" == "dev" ]; then
+            az vm delete --ids $(az vm list --query "[?starts_with(name,'dev-')].id" -o tsv) --yes
+          fi
+          
+          # Additional steps or commands as needed
