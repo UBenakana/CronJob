@@ -1,13 +1,13 @@
 name: Every 5 Minutes
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'
-  push:
-    branches:
-      - '**'
-    paths:
-      - '.github/workflows/CronJob.yml'
+  #schedule:
+  #  - cron: '*/5 * * * *'
+  #push:
+  #  branches:
+  #    - '**'
+  #  paths:
+  #    - '.github/workflows/CronJob.yml'
 
 jobs:
   cron_job:
