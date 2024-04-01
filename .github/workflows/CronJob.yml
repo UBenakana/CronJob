@@ -11,16 +11,13 @@ jobs:
   delete-azure-vms:
     name: Delete Azure VMs
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        branch: [main, preprod, dev]
     
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         
       - name: Delete Azure VMs
-        if: (github.event_name == 'schedule') || (github.event_name == 'push' && github.ref == 'refs/heads/${{ matrix.branch }}')
+        if: github.event_name == 'schedule' || (github.event_name == 'push' && github.ref == 'refs/heads/${{ github.event.ref_name }}')
         run: |
-          echo "Deleting Azure VMs for branch: ${{ matrix.branch }}"
+          echo "Deleting Azure VMs for branch: ${{ github.event.ref_name }}"
           # Steps to delete Azure VMs for the current branch
