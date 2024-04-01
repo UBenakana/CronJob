@@ -3,17 +3,20 @@ name: Every 5 Minutes
 on:
   schedule:
     - cron: '*/5 * * * *'
+  push:
+    branches:
+      - '**'
+    paths:
+      - '.github/workflows/CronJob.yml'
 
 jobs:
-
   cron_job:
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      
-    - name: Print current time
-      run: |
-        date
-        echo "This job runs every 5 minutes"
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Print current time
+        run: |
+          date
+          echo "This job runs every 5 minutes"
