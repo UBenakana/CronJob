@@ -1,23 +1,19 @@
+name: Every 5 Minutes
+
 on:
   schedule:
-    - cron: '5 * * * *' # Scheduled run at midnight every day
-  push:
-    branches:
-      - main
-      - dev
+    - cron: '*/5 * * * *'
 
 jobs:
 
-  delete-azure-vms:
-    name: Delete Azure VMs
+  cron_job:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        
-      - name: Delete Azure VMs
-        if: github.event_name == 'schedule' || (github.event_name == 'push' && github.ref == 'refs/heads/${{ github.event.ref_name }}')
-        run: |
-          echo "Deleting Azure VMs for branch: ${{ github.event.ref_name }}"
-          # Steps to delete Azure VMs for the current branch
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Print current time
+      run: |
+        date
+        echo "This job runs every 5 minutes"
