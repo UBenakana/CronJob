@@ -1,12 +1,12 @@
 name: Delete Azure VMs
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'  # Run every 5 minutes
-  push:
-    branches:
-      - main
-      - dev
+ # schedule:
+ #   - cron: '*/5 * * * *'  # Run every 5 minutes
+ # push:
+ #   branches:
+ #     - main
+ #     - dev
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
